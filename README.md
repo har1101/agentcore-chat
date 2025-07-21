@@ -34,8 +34,10 @@
 
 ```bash
 # 依存関係のインストール
-pip install -r requirements.txt
-pip install -r streamlit_requirements.txt
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+uv pip install -r streamlit_requirements.txt
 ```
 
 ### 2. AWS設定
@@ -47,9 +49,18 @@ aws configure
 
 ### 3. エージェントのデプロイ
 
+詳しい手順は以下ブログ参照。
+- [Strands Agents SDK×Bedrock AgentCore Runtimeで最先端のAIエージェント開発を楽しもう！](https://qiita.com/har1101/items/73fa749e05c4cb38bb6e)
+- [Amazon Bedrock AgentCoreって何？StrandsAgentでLine Bot作ってデプロイしてみよう！](https://qiita.com/Syoitu/items/e85c9d9bd389c987d7bc)
+
 ```bash
 # エージェントをAgentCoreにデプロイ
-python my_strands_agent.py
+# Docker Desktopを起動し、AgentCore用IAMサービスロールを準備しておく
+export IAM_ROLE_ARN=<作成したIAMロールのARN>
+
+agentcore configure --entrypoint my_strands_agents.py -er $IAM_ROLE_ARN
+
+agentcore launch
 ```
 
 ### 4. Streamlitアプリの起動
